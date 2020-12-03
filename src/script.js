@@ -123,7 +123,7 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
     counter++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (totalLot * stock * percentage).toFixed()
+    const gain = (totalLot * stock * percentage * 10).toFixed()
     stocks.push({
       no,
       stock,
@@ -135,52 +135,6 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
 
   return stocks
 }
-
-// console.clear()
-
-function separate() {
-  console.log('-----------------')
-}
-function getPercent(a, b) {
-  const result = (b - a) / a * 100
-  console.log(`${result.toFixed(2)}%`)
-  separate()
-}
-
-function cuan(doid, percent) {
-  const result = (doid / 100 * percent)
-  console.log(result.toFixed(1))
-  separate()
-}
-
-
-function percents(a) {
-  const result = a
-
-  console.log(`-2% ${-(a / 100 * 2) + a} Stoploss`)
-  console.log(`-1% ${-(a / 100 * 1) + a}`)
-  console.log(`1% ${(a / 100 * 1) + a}`)
-  console.log(`2% ${(a / 100 * 2) + a}`)
-  console.log(`3% ${(a / 100 * 3) + a}`)
-  console.log(`4% ${(a / 100 * 4) + a}`)
-  console.log(`5% ${(a / 100 * 5) + a}`)
-  console.log(`6% ${(a / 100 * 6) + a}`)
-  console.log(`7% ${(a / 100 * 7) + a}`)
-  console.log(`8% ${(a / 100 * 8) + a}`)
-  console.log(`9% ${(a / 100 * 9) + a}`)
-  console.log(`10% ${(a / 100 * 10) + a}`)
-  separate()
-}
-
-
-// getPercent(1475, 1490)
-// cuan(15147, 1.26)
-// percents(49802000)
-
-
-
-
-
 
 
 const domContainer = document.querySelector('#root')
