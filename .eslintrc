@@ -1,0 +1,17 @@
+{
+  "root": true,
+  "extends": "eslint:recommended",
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parser": "babel-eslint",
+  "globals": {
+    "React": true,
+    "ReactDOM": true
+  },
+  "rules": {
+    "semi": [2, "never"],
+    "no-unused-vars": 0
+  }
+}
