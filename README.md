@@ -8,7 +8,7 @@ https://reactjs.org/
 
 install live server on VSCode then click `Go Live`
 
-## notes
+### Notes
 hayukk, anyone can contribute
 
 just fork > create another branch > pull request

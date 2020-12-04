@@ -4,8 +4,10 @@ const slider = document.getElementById('slider')
 
 const outsideState = {
   defaultStockValue: 1475,
-  defaultTotalLot: 10,
-  typingTimeout: null,
+  defaultTotalLot: 50,
+  defaultStep: 5,
+  sliderTimeout: null,
+  fee: 0.36
 }
 
 const App = () => {
@@ -13,23 +15,36 @@ const App = () => {
   const [state, setState] = React.useState({
     stockValue: outsideState.defaultStockValue,
     totalLot: outsideState.defaultTotalLot,
+    sliderValue: outsideState.defaultStockValue,
     min: 0,
     max: 0,
-    step: 5,
-    stocks: getStocks(outsideState.defaultStockValue, 10, 5)
+    step: outsideState.defaultStep,
+    percentage: 0,
+    stocks: getStocks(outsideState.defaultStockValue, 0, outsideState.defaultStep)
   })
 
   React.useEffect(() => {
     handleChangeStockValue(outsideState.defaultStockValue)
-  }, [])
+  }, [state.totalLot])
+
+  // React.useEffect(() => {
+  //   clearTimeout(outsideState.sliderTimeout)
+  //   outsideState.sliderTimeout = setTimeout(() => {
+  //     updateStocks(state.sliderValue)
+  //   }, 1500)
+  // }, [state.sliderValue])
 
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
-    if (stockValue < 1000) {
+    if (stockValue < 100) {
+      step = 1
+    } else if (stockValue < 500) {
+      step = 2
+    } else if (stockValue < 3000) {
       step = 5
     } else {
-      step = 5
+      step = 1
     }
 
     const stocks = getStocks(stockValue, state.totalLot, state.step)
@@ -38,8 +53,9 @@ const App = () => {
       ...state,
       step,
       stockValue,
-      min: stockValue - (step * 20),
-      max: stockValue + (step * 140),
+      min: stockValue - (step * 30),
+      max: stockValue + (step * 90),
+      sliderValue: stockValue,
       stocks
     }
 
@@ -52,39 +68,26 @@ const App = () => {
     setState({ ...state, totalLot })
   }
 
-  const handleSlider = (stockValue) => {
-    const stocks = getStocks(stockValue, state.totalLot, state.step)
-    setState({ ...state, stockValue, stocks })
+  const handleSlider = (sliderValue) => {
+    const percentage = getPercentage(state.stockValue, sliderValue)
+    setState({ ...state, sliderValue, percentage })
+    
+    clearTimeout(outsideState.sliderTimeout)
+    outsideState.sliderTimeout = setTimeout(() => {
+      updateStocks(state.sliderValue)
+    }, 250)
   }
 
-  console.log('state', state)
+  const updateStocks = (sliderValue) => {
+    console.log(state)
+    const stocks = getStocks(sliderValue, state.totalLot, state.step)
+    setState({ ...state, stocks })
+  }
 
-  return (
-    <div className="container d">
-      <div className="row">
-        <div className="col-sm">
-          <h5>Stock Price (buy)</h5>
-          <input type="number" className="form-control col-3" id="input"
-            step={state.step} placeholder="Input Stock Here" defaultValue={state.stockValue}
-            noValidate onChange={(e) => handleChangeStockValue(e.target.value)}
-          />
-          <h5 style={{ marginTop: 10 }}>Total Lot</h5>
-          <input type="number" className="form-control col-3" id="input"
-            step="1" placeholder="(optional)" defaultValue=""
-            noValidate onChange={(e) => handleChangeStockValue(e.target.value)}
-          />
-        </div>
-        <div className="col-sm">
-          <div className="row mb-3">
-            <label htmlFor="customRange3" className="form-label col-2">Example range</label>
-          </div>
-          <input type="range" className="form-range" value={state.stockValue}
-            min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
-          <div>{state.stockValue}</div>
-        </div>
-        <div className="col-sm">
-        </div>
-      </div>
+  // console.log('state', state)
+
+  const renderTable = React.useMemo(() => {
+    return (
       <table className="table mt-10" style={{ marginTop: 50 }}>
         <thead>
           <tr>
@@ -110,6 +113,39 @@ const App = () => {
           }
         </tbody>
       </table>
+    )
+  }, [state.stocks])
+
+  return (
+    <div className="container d">
+      <div className="row">
+        <div className="col-sm">
+          <h5>Stock Price (buy)</h5>
+          <input type="number" className="form-control col-3" id="input"
+            step={state.step} placeholder="Input Stock Here" defaultValue={state.stockValue}
+            noValidate onChange={(e) => handleChangeStockValue(e.target.value)}
+          />
+          <h5 style={{ marginTop: 10 }}>Total Lot</h5>
+          <input type="number" className="form-control col-3" id="input"
+            step="1" placeholder="(optional)" defaultValue={state.totalLot}
+            noValidate onChange={(e) => handleChangeTotalLot(e.target.value)}
+          />
+        </div>
+        <div className="col-sm">
+          <div className="row mb-3">
+            <label htmlFor="customRange3" className="form-label col-2">Example range</label>
+          </div>
+          <input type="range" className="form-range" value={state.sliderValue}
+            min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
+
+          <div>{state.stockValue} - {state.sliderValue}</div>
+          <div style={{ color: state.percentage >= 0 ? 'green' : 'red' }}>{state.percentage}%</div>
+
+        </div>
+      </div>
+
+      {renderTable}
+
     </div>
   )
 }
@@ -123,7 +159,7 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
     counter++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (totalLot * stock * percentage * 10).toFixed()
+    const gain = (totalLot * stock * percentage).toFixed()
     stocks.push({
       no,
       stock,
@@ -134,6 +170,11 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
   }
 
   return stocks
+}
+
+function getPercentage(startingStock, targetStock) {
+  const result = ((targetStock - startingStock) / startingStock * 100) - 0.36
+  return result.toFixed(2)
 }
 
 
