@@ -64,7 +64,7 @@ const App = () => {
   const handleSlider = (sliderValue) => {
     const percentage = getPercentage(state.stockValue, sliderValue)
     setState({ ...state, sliderValue, percentage })
-    
+
     clearTimeout(outsideState.sliderTimeout)
     outsideState.sliderTimeout = setTimeout(() => {
       updateStocks(state.sliderValue)
@@ -87,7 +87,7 @@ const App = () => {
             <th scope="col">#</th>
             <th scope="col">Price</th>
             <th scope="col">Percentage</th>
-            <th scope="col">Cuan</th>
+            <th scope="col">Gain/Loss (fee {outsideState.fee}%)</th>
           </tr>
         </thead>
         <tbody>
@@ -95,7 +95,7 @@ const App = () => {
             state.stocks.map((item) => {
 
               return (
-                <tr key={item.no}>
+                <tr key={item.no} className={item.stock === state.stockValue ? 'table-info' : ''}>
                   <th scope="row">{item.no}</th>
                   <td>{item.stock}</td>
                   <td>{item.percentage}%</td>
@@ -126,7 +126,7 @@ const App = () => {
         </div>
         <div className="col-sm">
           <div className="row mb-3">
-            <label htmlFor="customRange3" className="form-label col-2">Example range</label>
+            <label htmlFor="customRange3" className="form-label">The neighbor's grass is greener</label>
           </div>
           <input type="range" className="form-range" value={state.sliderValue}
             min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
@@ -148,11 +148,11 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
 
   for (
     let counter = -2, no = 1, stock = startingStock - (2 * step);
-    counter < 13;
+    counter < 43;
     counter++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (totalLot * stock * percentage).toFixed()
+    const gain = (+(totalLot * stock * (percentage - outsideState.fee)).toFixed()).toLocaleString()
     stocks.push({
       no,
       stock,
