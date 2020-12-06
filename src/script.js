@@ -27,13 +27,6 @@ const App = () => {
     handleChangeStockValue(outsideState.defaultStockValue)
   }, [state.totalLot])
 
-  // React.useEffect(() => {
-  //   clearTimeout(outsideState.sliderTimeout)
-  //   outsideState.sliderTimeout = setTimeout(() => {
-  //     updateStocks(state.sliderValue)
-  //   }, 1500)
-  // }, [state.sliderValue])
-
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
