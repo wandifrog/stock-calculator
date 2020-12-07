@@ -30,17 +30,23 @@ const App = () => {
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
-    if (stockValue < 100) {
-      step = 1
-    } else if (stockValue < 500) {
-      step = 2
-    } else if (stockValue < 3000) {
+    if (stockValue > 3000) {
+      step = 10
+    } else if (stockValue > 1000) {
       step = 5
+    } else if (stockValue > 500) {
+      step = 2
     } else {
-      step = 1
+      step = 10
     }
 
-    const stocks = getStocks(stockValue, state.totalLot, state.step)
+    const getStocksArgs = {
+      startingStock: stockValue,
+      currentStock: stockValue,
+      lot: state.totalLot,
+      step: state.step
+    }
+    const stocks = getStocks(getStocksArgs)
 
     const newState = {
       ...state,
@@ -84,7 +90,6 @@ const App = () => {
       <table className="table mt-10" style={{ marginTop: 50 }}>
         <thead>
           <tr>
-            <th scope="col">#</th>
             <th scope="col">Price</th>
             <th scope="col">Percentage</th>
             <th scope="col">Gain/Loss (fee {outsideState.fee}%)</th>
@@ -96,7 +101,6 @@ const App = () => {
 
               return (
                 <tr key={item.no} className={item.stock === state.stockValue ? 'table-info' : ''}>
-                  <th scope="row">{item.no}</th>
                   <td>{item.stock}</td>
                   <td>{item.percentage}%</td>
                   <td>{item.gain}</td>
@@ -143,7 +147,14 @@ const App = () => {
   )
 }
 
-function getStocks(startingStock, totalLot = 0, step = 5) {
+// interface GetStocks {
+//   startingStock: number
+//   currentStock: number
+//   lot?: number
+//   step?: number
+//   fee?: number
+// }
+function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = 0.36 }) {
   const stocks = []
 
   for (
@@ -152,7 +163,7 @@ function getStocks(startingStock, totalLot = 0, step = 5) {
     counter++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (+(totalLot * stock * (percentage - outsideState.fee)).toFixed()).toLocaleString()
+    const gain = (+(lot * stock * (+percentage - fee)).toFixed()).toLocaleString()
     stocks.push({
       no,
       stock,
