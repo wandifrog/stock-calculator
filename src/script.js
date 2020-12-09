@@ -117,7 +117,7 @@ const App = () => {
     <div className="container d">
       <div className="row">
         <div className="col-sm">
-          <h5>Stock Price (buy)</h5>
+          <h5>Stock Price (average)</h5>
           <input type="number" className="form-control col-3" id="input"
             step={state.step} placeholder="Input Stock Here" defaultValue={state.stockValue}
             noValidate onChange={(e) => handleChangeStockValue(e.target.value)}
