@@ -12,20 +12,31 @@ const outsideState = {
 
 const App = () => {
 
-  const [state, setState] = React.useState({
-    stockValue: outsideState.defaultStockValue,
-    totalLot: outsideState.defaultTotalLot,
-    sliderValue: outsideState.defaultStockValue,
-    min: 0,
-    max: 0,
-    step: outsideState.defaultStep,
-    percentage: 0,
-    stocks: getStocks(outsideState.defaultStockValue, 0, outsideState.defaultStep)
+  const [state, setState] = React.useState(() => {
+    const getStocksParams = {
+      startingStock: outsideState.defaultStockValue,
+      currentStock: outsideState.defaultStockValue,
+      lot: outsideState.defaultTotalLot,
+      step: outsideState.defaultStep
+    }
+    const stocks = getStocks(getStocksParams)
+
+    return {
+      stockValue: outsideState.defaultStockValue,
+      totalLot: outsideState.defaultTotalLot,
+      sliderValue: outsideState.defaultStockValue,
+      min: 1200,
+      max: 2000,
+      step: outsideState.defaultStep,
+      percentage: 0,
+      stocks
+    }
   })
 
-  React.useEffect(() => {
-    handleChangeStockValue(outsideState.defaultStockValue)
-  }, [state.totalLot])
+  // React.useEffect(() => {
+  //   // alert(1)
+  //   handleChangeStockValue(state.stockValue)
+  // }, [state.totalLot])
 
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
@@ -40,13 +51,13 @@ const App = () => {
       step = 10
     }
 
-    const getStocksArgs = {
+    const getStocksParams = {
       startingStock: stockValue,
       currentStock: stockValue,
       lot: state.totalLot,
       step: state.step
     }
-    const stocks = getStocks(getStocksArgs)
+    const stocks = getStocks(getStocksParams)
 
     const newState = {
       ...state,
@@ -64,7 +75,15 @@ const App = () => {
   const handleChangeTotalLot = (totalLot) => {
     totalLot = +totalLot
 
-    setState({ ...state, totalLot })
+    const getStocksParams = {
+      startingStock: state.stockValue,
+      currentStock: state.stockValue,
+      lot: totalLot,
+      step: state.step
+    }
+    const stocks = getStocks(getStocksParams)
+
+    setState({ ...state, totalLot, stocks })
   }
 
   const handleSlider = (sliderValue) => {
@@ -73,17 +92,12 @@ const App = () => {
 
     clearTimeout(outsideState.sliderTimeout)
     outsideState.sliderTimeout = setTimeout(() => {
-      updateStocks(state.sliderValue)
-    }, 250)
+      const stocks = getStocks(state.sliderValue, state.totalLot, state.step)
+      setState({ ...state, stocks, sliderValue, percentage })
+    }, 1000)
   }
 
-  const updateStocks = (sliderValue) => {
-    console.log(state)
-    const stocks = getStocks(sliderValue, state.totalLot, state.step)
-    setState({ ...state, stocks })
-  }
-
-  // console.log('state', state)
+  console.log('state', state)
 
   const renderTable = React.useMemo(() => {
     return (
