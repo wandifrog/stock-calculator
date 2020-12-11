@@ -33,11 +33,6 @@ const App = () => {
     }
   })
 
-  // React.useEffect(() => {
-  //   // alert(1)
-  //   handleChangeStockValue(state.stockValue)
-  // }, [state.totalLot])
-
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
@@ -48,7 +43,7 @@ const App = () => {
     } else if (stockValue > 500) {
       step = 2
     } else {
-      step = 10
+      step = 1
     }
 
     const getStocksParams = {
@@ -92,9 +87,15 @@ const App = () => {
 
     clearTimeout(outsideState.sliderTimeout)
     outsideState.sliderTimeout = setTimeout(() => {
-      const stocks = getStocks(state.sliderValue, state.totalLot, state.step)
+      const getStocksParams = {
+        startingStock: state.stockValue,
+        currentStock: +sliderValue,
+        lot: state.totalLot,
+        step: state.step
+      }
+      const stocks = getStocks(getStocksParams)
       setState({ ...state, stocks, sliderValue, percentage })
-    }, 1000)
+    }, 250)
   }
 
   console.log('state', state)
@@ -172,9 +173,9 @@ function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = 0.36 
   const stocks = []
 
   for (
-    let counter = -2, no = 1, stock = startingStock - (2 * step);
-    counter < 43;
-    counter++, no++, stock += step
+    let no = 1, stock = currentStock - (4 * step);
+    no <= 45;
+    no++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
     const gain = (+(lot * stock * (+percentage - fee)).toFixed()).toLocaleString()
