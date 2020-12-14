@@ -149,7 +149,6 @@ const App = () => {
           </div>
           <input type="range" className="form-range" value={state.sliderValue}
             min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
-          <div editable>{state.stockValue} - <span contenteditable="true">{state.sliderValue}</span></div>
           <div>{state.stockValue} -
               <input type="number" value={state.sliderValue} style={{ width: 80, marginLeft: 6 }}
               placeholder="Input Stock Here" defaultValue={state.stockValue}
