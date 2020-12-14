@@ -50,7 +50,7 @@ const App = () => {
       startingStock: stockValue,
       currentStock: stockValue,
       lot: state.totalLot,
-      step: state.step
+      step
     }
     const stocks = getStocks(getStocksParams)
 
@@ -98,7 +98,7 @@ const App = () => {
     }, 250)
   }
 
-  console.log('state', state)
+  // console.log('state', state)
 
   const renderTable = React.useMemo(() => {
     return (
@@ -150,10 +150,8 @@ const App = () => {
           <input type="range" className="form-range" value={state.sliderValue}
             min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
           <div>{state.stockValue} -
-              <input type="number" value={state.sliderValue} style={{ width: 80, marginLeft: 6 }}
-              placeholder="Input Stock Here" defaultValue={state.stockValue}
-              onChange={(e) => handleSlider(e.target.value)}
-            />
+            <input type="number" value={state.sliderValue} style={{ width: 80, marginLeft: 6 }} 
+              placeholder="Input Stock Here" onChange={(e) => handleSlider(e.target.value)} />
           </div>
           <div style={{ color: state.percentage >= 0 ? 'green' : 'red' }}>{state.percentage}%</div>
         </div>
