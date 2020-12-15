@@ -7,7 +7,7 @@ const outsideState = {
   defaultTotalLot: 50,
   defaultStep: 5,
   sliderTimeout: null,
-  fee: 0.36
+  fee: 0.4
 }
 
 const App = () => {
@@ -81,7 +81,8 @@ const App = () => {
     setState({ ...state, totalLot, stocks })
   }
 
-  const handleSlider = (sliderValue) => {
+  const handleSlider = (stockValue) => {
+    const sliderValue = +stockValue
     const percentage = getPercentage(state.stockValue, sliderValue)
     setState({ ...state, sliderValue, percentage })
 
@@ -98,7 +99,7 @@ const App = () => {
     }, 250)
   }
 
-  // console.log('state', state)
+  console.log('state', state)
 
   const renderTable = React.useMemo(() => {
     return (
@@ -115,7 +116,11 @@ const App = () => {
             state.stocks.map((item) => {
 
               return (
-                <tr key={item.no} className={item.stock === state.stockValue ? 'table-info' : ''}>
+                <tr key={item.no} className={
+                  item.stock === state.sliderValue
+                    ? 'table-info'
+                    : item.stock === state.stockValue
+                      ? 'table-warning' : ''}>
                   <td>{item.stock}</td>
                   <td>{item.percentage}%</td>
                   <td>{item.gain}</td>
@@ -150,8 +155,9 @@ const App = () => {
           <input type="range" className="form-range" value={state.sliderValue}
             min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
           <div>{state.stockValue} -
-            <input type="number" value={state.sliderValue} style={{ width: 80, marginLeft: 6 }} 
-              placeholder="Input Stock Here" onChange={(e) => handleSlider(e.target.value)} />
+            <input type="number" value={state.sliderValue} style={{ width: 80, marginLeft: 6 }}
+              step={state.step} placeholder="Input Stock Here"
+              onChange={(e) => handleSlider(e.target.value)} />
           </div>
           <div style={{ color: state.percentage >= 0 ? 'green' : 'red' }}>{state.percentage}%</div>
         </div>
@@ -170,7 +176,7 @@ const App = () => {
 //   step?: number
 //   fee?: number
 // }
-function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = 0.36 }) {
+function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = outsideState.fee }) {
   const stocks = []
 
   for (
