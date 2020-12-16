@@ -7,7 +7,7 @@ const outsideState = {
   defaultTotalLot: 50,
   defaultStep: 5,
   sliderTimeout: null,
-  fee: 0.4
+  fee: 0.36
 }
 
 const App = () => {
@@ -108,7 +108,7 @@ const App = () => {
           <tr>
             <th scope="col">Price</th>
             <th scope="col">Percentage</th>
-            <th scope="col">Gain/Loss (fee {outsideState.fee}%)</th>
+            <th scope="col">Gain/Loss</th>
           </tr>
         </thead>
         <tbody>
@@ -185,7 +185,11 @@ function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = outsi
     no++, no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (+(lot * stock * (+percentage - fee)).toFixed()).toLocaleString()
+    const gain = (+(lot * stock * +percentage).toFixed()).toLocaleString()
+    // console.log(gain.toLocaleString())
+    // const grossProfit = 0
+    // const netProfit = (totalProfit)
+    // .toFixed()).toLocaleString()
     stocks.push({
       no,
       stock,
