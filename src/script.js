@@ -148,10 +148,8 @@ const App = () => {
             noValidate onChange={(e) => handleChangeTotalLot(e.target.value)}
           />
         </div>
-        <div className="col-sm">
-          <div className="row mb-3">
-            <label htmlFor="customRange3" className="form-label">The neighbor's grass is greener</label>
-          </div>
+        <div className="col-sm" style={{ marginTop: '10px' }}>
+          <label htmlFor="customRange3" className="form-label">The neighbor's grass is greener</label>
           <input type="range" className="form-range" value={state.sliderValue}
             min={state.min} max={state.max} step={state.step} id="slider" onChange={(e) => handleSlider(e.target.value)} />
           <div>{state.stockValue} -
