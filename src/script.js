@@ -38,7 +38,7 @@ const App = () => {
     let step
     if (stockValue > 2000) {
       step = 10
-    } else if (stockValue > 1000) {
+    } else if (stockValue > 600) {
       step = 5
     } else if (stockValue > 500) {
       step = 2
@@ -178,9 +178,9 @@ function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = outsi
   const stocks = []
 
   for (
-    let no = 1, stock = currentStock - (4 * step);
-    no <= 45;
-    no++, no++, stock += step
+    let no = 1, stock = currentStock - (6 * step);
+    no <= 65;
+    no++, stock += step
   ) {
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
     const gain = (+(lot * stock * +percentage).toFixed()).toLocaleString()
