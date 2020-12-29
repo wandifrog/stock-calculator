@@ -36,7 +36,9 @@ const App = () => {
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
-    if (stockValue > 2000) {
+    if (stockValue > 5000) {
+      step = 25
+    } else if (stockValue > 2000) {
       step = 10
     } else if (stockValue > 600) {
       step = 5
@@ -108,7 +110,7 @@ const App = () => {
           <tr>
             <th scope="col">Price</th>
             <th scope="col">Percentage</th>
-            <th scope="col">Gain/Loss</th>
+            <th scope="col">gain/loss</th>
           </tr>
         </thead>
         <tbody>
