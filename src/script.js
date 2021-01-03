@@ -36,13 +36,13 @@ const App = () => {
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
     let step
-    if (stockValue > 5000) {
+    if (stockValue >= 5000) {
       step = 25
-    } else if (stockValue > 2000) {
+    } else if (stockValue >= 2000) {
       step = 10
-    } else if (stockValue > 600) {
+    } else if (stockValue >= 600) {
       step = 5
-    } else if (stockValue > 500) {
+    } else if (stockValue >= 500) {
       step = 2
     } else {
       step = 1
