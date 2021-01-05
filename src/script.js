@@ -203,7 +203,7 @@ function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = outsi
 }
 
 function getPercentage(startingStock, targetStock) {
-  const result = ((targetStock - startingStock) / startingStock * 100) - 0.36
+  const result = ((targetStock - startingStock) / startingStock * 100)
   return result.toFixed(2)
 }
 
