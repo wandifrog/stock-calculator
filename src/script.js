@@ -42,7 +42,7 @@ const App = () => {
       step = 10
     } else if (stockValue >= 600) {
       step = 5
-    } else if (stockValue >= 500) {
+    } else if (stockValue >= 300) {
       step = 2
     } else {
       step = 1
