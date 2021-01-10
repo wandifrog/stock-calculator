@@ -33,24 +33,27 @@ const App = () => {
     }
   })
 
+  const getStep = (stockValue) => {
+    if (stockValue >= 5000) {
+      return 25
+    } else if (stockValue >= 2000) {
+      return 10
+    } else if (stockValue >= 600) {
+      return 5
+    } else if (stockValue >= 300) {
+      return 2
+    } else {
+      return 1
+    }
+  }
+
   const handleChangeStockValue = (stockValue) => {
     stockValue = +stockValue
-    let step
-    if (stockValue >= 5000) {
-      step = 25
-    } else if (stockValue >= 2000) {
-      step = 10
-    } else if (stockValue >= 600) {
-      step = 5
-    } else if (stockValue >= 300) {
-      step = 2
-    } else {
-      step = 1
-    }
-
+    
+    const step = getStep(stockValue)
     const getStocksParams = {
       startingStock: stockValue,
-      currentStock: stockValue,
+      currentStock: state.sliderValue,
       lot: state.totalLot,
       step
     }
@@ -62,7 +65,6 @@ const App = () => {
       stockValue,
       min: stockValue - (step * 30),
       max: stockValue + (step * 90),
-      sliderValue: stockValue,
       stocks
     }
 
@@ -74,7 +76,7 @@ const App = () => {
 
     const getStocksParams = {
       startingStock: state.stockValue,
-      currentStock: state.stockValue,
+      currentStock: state.sliderValue,
       lot: totalLot,
       step: state.step
     }
@@ -85,8 +87,10 @@ const App = () => {
 
   const handleSlider = (stockValue) => {
     const sliderValue = +stockValue
+    const step = getStep(sliderValue)
     const percentage = getPercentage(state.stockValue, sliderValue)
-    setState({ ...state, sliderValue, percentage })
+    
+    setState({ ...state, sliderValue, percentage, step })
 
     clearTimeout(outsideState.sliderTimeout)
     outsideState.sliderTimeout = setTimeout(() => {
@@ -101,7 +105,7 @@ const App = () => {
     }, 250)
   }
 
-  console.log('state', state)
+  // console.log('state', state)
 
   const renderTable = React.useMemo(() => {
     return (
@@ -169,27 +173,18 @@ const App = () => {
   )
 }
 
-// interface GetStocks {
-//   startingStock: number
-//   currentStock: number
-//   lot?: number
-//   step?: number
-//   fee?: number
-// }
 function getStocks({ startingStock, currentStock, lot = 0, step = 5, fee = outsideState.fee }) {
   const stocks = []
-
+  const startingStockValue = startingStock * lot * 100
   for (
     let no = 1, stock = currentStock - (6 * step);
     no <= 65;
     no++, stock += step
   ) {
+    // stock = currentStock in local for variable
     const percentage = ((stock - startingStock) / startingStock * 100).toFixed(2)
-    const gain = (+(lot * stock * +percentage).toFixed()).toLocaleString()
-    // console.log(gain.toLocaleString())
-    // const grossProfit = 0
-    // const netProfit = (totalProfit)
-    // .toFixed()).toLocaleString()
+    const currentStockValue = stock * lot * 100
+    const gain = (currentStockValue - startingStockValue).toLocaleString()
     stocks.push({
       no,
       stock,
