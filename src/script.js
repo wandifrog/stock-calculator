@@ -53,7 +53,7 @@ const App = () => {
     const step = getStep(stockValue)
     const getStocksParams = {
       startingStock: stockValue,
-      currentStock: state.sliderValue,
+      currentStock: stockValue,
       lot: state.totalLot,
       step
     }
