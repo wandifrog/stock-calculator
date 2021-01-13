@@ -63,6 +63,7 @@ const App = () => {
       ...state,
       step,
       stockValue,
+      sliderValue: stockValue,
       min: stockValue - (step * 30),
       max: stockValue + (step * 90),
       stocks
