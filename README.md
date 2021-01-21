@@ -1,4 +1,4 @@
-### Preview AGRO
+### Preview (sideway)
 https://wandifrog.netlify.app/
 
 ## Tech stacks
