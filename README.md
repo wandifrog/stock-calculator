@@ -1,4 +1,4 @@
-### Preview (sideway)
+### Preview (worst bandar)
 https://wandifrog.netlify.app/
 
 ## Tech stacks
