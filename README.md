@@ -1,4 +1,4 @@
-### Preview (test 123)
+### Preview (test)
 https://wandifrog.netlify.app/
 
 ## Tech stacks
