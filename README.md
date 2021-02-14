@@ -1,4 +1,4 @@
-### Preview (?)
+### Preview
 https://wandifrog.netlify.app/
 
 ## Tech stacks
